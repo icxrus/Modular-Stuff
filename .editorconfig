@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# IDE0051: Remove unused private members
+dotnet_diagnostic.IDE0051.severity = silent
+
+# CS0414: The field 'BasicMovementModule.basicMovementSpeed' is assigned but its value is never used
+dotnet_diagnostic.CS0414.severity = warning
+
+# IDE0044: Add readonly modifier
+dotnet_diagnostic.IDE0044.severity = suggestion
