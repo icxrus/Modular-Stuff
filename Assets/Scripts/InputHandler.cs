@@ -8,6 +8,7 @@ public class InputHandler : MonoBehaviour
 
     //Input Actions - Add all new actions here following the format (action must be present in Player Inputs).
     private InputAction movementAction, jumpAction, runAction, crouchAction;
+    private bool movementHoldDown, runHoldDown, crouchHoldDown;
 
     private void Awake()
     {
@@ -37,18 +38,44 @@ public class InputHandler : MonoBehaviour
 
     private void Update()
     {
+        movementAction.performed += _ => movementHoldDown = true;
+        movementAction.canceled += _ => movementHoldDown = false;
+
+        runAction.performed += _ => runHoldDown = true;
+        runAction.canceled += _ => runHoldDown = false;
+
+        crouchAction.performed += _ => crouchHoldDown = true;
+        crouchAction.canceled += _ => crouchHoldDown = false;
+
         //Invoke each delegate if the corresponding button is triggered
-        if (movementAction.triggered)
+        if (movementHoldDown)
             MovementTriggeredCallBack?.Invoke();
 
         if (jumpAction.triggered)
             JumpTriggeredCallback?.Invoke();
 
-        if (runAction.triggered)
+        if (runHoldDown)
             RunTriggeredCallback?.Invoke();
 
-        if (crouchAction.triggered)
+        if (crouchHoldDown)
             CrouchTriggeredCallback?.Invoke();
     }
 
+    #region Helper Functions
+    public bool JumpTriggeredCheckForDownForce()
+    {
+        if (jumpAction.triggered)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public Vector2 ReturnInputValuesForMovement()
+    {
+        Vector2 input = movementAction.ReadValue<Vector2>();
+        return input;
+    }
+    #endregion
 }
