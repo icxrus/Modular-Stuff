@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ApplyMovement : MonoBehaviour
@@ -49,7 +47,6 @@ public class ApplyMovement : MonoBehaviour
     public bool GroundCheck()
     {
         Vector3 dir = new(0, -1);
-        //THIS ALSO DOESN'T WORK WHY??
         if (Physics.Raycast(transform.position, dir, controller.height * 0.5f + 0.1f))
             return true;
         else

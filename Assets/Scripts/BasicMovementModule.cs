@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(InputHandler), typeof(Animator))]
@@ -99,6 +96,17 @@ public class BasicMovementModule : MonoBehaviour
         animator.SetFloat(speedXAnimationParameterID, currentAnimationBlendVector.x);
         animator.SetFloat(speedYAnimationParameterID, currentAnimationBlendVector.y);
     }
+    public Vector3 ReturnMoveVector3Values()
+    {
+        try
+        {
+            return basicMovementSpeed * Time.deltaTime * move;
+        }
+        finally
+        {
+            move = Vector3.zero;
+        }
+    }
 
     private void AvoidSlopeBouncing()
     {
@@ -119,16 +127,5 @@ public class BasicMovementModule : MonoBehaviour
             return false;
     }
 
-    public Vector3 ReturnMoveVector3Values()
-    {
-        try
-        {
-            return basicMovementSpeed * Time.deltaTime * move;
-        }
-        finally
-        {
-            move = Vector3.zero;
-        }
-    }
 
 }
