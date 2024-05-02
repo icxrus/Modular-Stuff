@@ -72,6 +72,25 @@ public class InputHandler : MonoBehaviour
             return false;
     }
 
+    public bool RunningActive()
+    {
+        if (runHoldDown)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    public bool CrouchingActive()
+    {
+        if (crouchHoldDown)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
     public Vector2 ReturnInputValuesForMovement()
     {
         Vector2 input = movementAction.ReadValue<Vector2>();

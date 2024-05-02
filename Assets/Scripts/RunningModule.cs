@@ -4,6 +4,7 @@ using UnityEngine;
 public class RunningModule : MonoBehaviour
 {
     private float runningSpeed = 6f;
+    private bool isRunning;
 
     private void OnEnable()
     {
@@ -19,6 +20,25 @@ public class RunningModule : MonoBehaviour
 
     private void PlayerRun()
     {
-        Debug.Log("Running");
+        isRunning = true;
     }
+
+    public float GetRunSpeed()
+    {
+        if (isRunning)
+        {
+            try 
+            {
+                return runningSpeed;
+            }
+            finally
+            {
+                isRunning = false;
+            }
+
+        }
+        else
+            return 0f;
+    }
+
 }

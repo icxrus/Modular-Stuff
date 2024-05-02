@@ -4,6 +4,7 @@ using UnityEngine;
 public class CrouchingModule : MonoBehaviour
 {
     private float crouchingSpeed = 1.5f;
+    private bool isCrouching;
 
     private void OnEnable()
     {
@@ -19,6 +20,24 @@ public class CrouchingModule : MonoBehaviour
 
     private void CrouchMovement()
     {
-        Debug.Log("Crouching");
+        isCrouching = true;
+    }
+
+    public float GetCrouchSpeed()
+    {
+        if (isCrouching)
+        {
+            try
+            {
+                return crouchingSpeed;
+            }
+            finally
+            {
+                isCrouching = false;
+            }
+
+        }
+        else
+            return 0f;
     }
 }

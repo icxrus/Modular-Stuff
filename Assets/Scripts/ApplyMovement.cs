@@ -6,10 +6,12 @@ public class ApplyMovement : MonoBehaviour
     private InputHandler _inputHandler;
     private BasicMovementModule _basicMovementModule;
 
+    [SerializeField]
     private Vector3 playerVelocity;
+    private float vertVelocity;
     private bool isGrounded = true;
 
-    private float gravityValue = -9.81f;
+    private float gravityValue = 9.81f;
 
     private void Start()
     {
@@ -21,29 +23,35 @@ public class ApplyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Slam to ground
-        if (isGrounded && playerVelocity.y < 0)
-        {
-            playerVelocity.y = 0f;
-        }
+        //Ground Check
         isGrounded = GroundCheck();
+        playerVelocity = _basicMovementModule.ReturnMoveVector3Values();
 
-        controller.Move(_basicMovementModule.ReturnMoveVector3Values());
-
-        //Apply Jump if module installed
-        if (GetComponent<JumpingModule>())
+        if (isGrounded) 
         {
-            Debug.Log("Getting Jump Velocity");
-            playerVelocity = GetComponent<JumpingModule>().ReturnJumpVelocityModifier();
+            vertVelocity = 0;
+            if (GetComponent<JumpingModule>() && _inputHandler.JumpTriggeredCheckForDownForce()) //If we are jumping we should change the vertical velocity to be that of the jump
+            {
+                vertVelocity = GetComponent<JumpingModule>().ReturnJumpVelocityModifier();
+            }
         }
 
-        //Gravity
-        playerVelocity.y += gravityValue * Time.deltaTime;
+        //Apply Gravity to velocity
+        vertVelocity -= gravityValue * Time.deltaTime;
+        playerVelocity.y = vertVelocity;
+
+        //Reduce Slope bounce
+        bool jumpTriggered = _inputHandler.JumpTriggeredCheckForDownForce();
+        if (isGrounded && !jumpTriggered)
+        {
+            playerVelocity.y = -0.1f;
+        }
+
+        //Do the movings
         controller.Move(playerVelocity * Time.deltaTime);
 
-        AvoidSlopeBouncing();
-
     }
+
     public bool GroundCheck()
     {
         Vector3 dir = new(0, -1);
@@ -51,17 +59,6 @@ public class ApplyMovement : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    private void AvoidSlopeBouncing()
-    {
-        bool jumpTriggered = _inputHandler.JumpTriggeredCheckForDownForce();
-
-        //Avoid bouncing on slopes
-        if (isGrounded && !jumpTriggered) //NEED GROUND CHECK HERE TOO
-        {
-            controller.Move(-Vector3.up * 0.1f);
-        }
     }
 
 }
