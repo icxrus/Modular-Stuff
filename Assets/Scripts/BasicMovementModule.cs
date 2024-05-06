@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(InputHandler), typeof(Animator))]
+[RequireComponent(typeof(InputHandler), typeof(ApplyMovement), typeof(Animator))]
 public class BasicMovementModule : MonoBehaviour
 {
     private Animator animator;
